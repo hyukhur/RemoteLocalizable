@@ -1,0 +1,19 @@
+PODS:
+  - AGAsyncTestHelper (0.2.2)
+  - OCMock (2.2.2)
+  - TCBlobDownload (1.4.0)
+  - ZipArchive (1.2.0)
+
+DEPENDENCIES:
+  - AGAsyncTestHelper
+  - OCMock
+  - TCBlobDownload (~> 1.4.0)
+  - ZipArchive
+
+SPEC CHECKSUMS:
+  AGAsyncTestHelper: 2d4244bd42bfd011926545765af4d2c75bd2f3b3
+  OCMock: ffba68873fd32cfd35d885bddad23bfa816da4a3
+  TCBlobDownload: 2490f51f0c4fda4e42643fcd9bd6eb9e6b18a79d
+  ZipArchive: 93bff5d8b435767ccfac976ed08ca611d950d3d0
+
+COCOAPODS: 0.29.0
