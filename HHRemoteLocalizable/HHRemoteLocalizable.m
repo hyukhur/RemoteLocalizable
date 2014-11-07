@@ -7,14 +7,14 @@
 //
 
 #import "HHRemoteLocalizable.h"
-#import <ZipArchive/ZipArchive.h>
+#import <SSZipArchive/SSZipArchive.h>
 #import <TCBlobDownload/TCBlobDownloadManager.h>
 
 #import "HHRemoteLocalizableSettings.h"
 
 static HHRemoteLocalizable *gDefaultLocalizable;
 
-@interface HHRemoteLocalizable () <ZipArchiveDelegate>
+@interface HHRemoteLocalizable () <SSZipArchiveDelegate>
 @property NSBundle *remoteBundle;
 - (BOOL)bundleForURL:(NSURL *)URL completion:(void(^)(NSBundle *, NSError *))aCompletionBlock;
 @end
@@ -24,22 +24,11 @@ static HHRemoteLocalizable *gDefaultLocalizable;
 
 - (NSBundle *)bundleWithUnzipFile:(NSString *)pathToFile error:(NSError **)errorReference;
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    ZipArchive *zipArchive = [[ZipArchive alloc] initWithFileManager:fileManager];
-    [zipArchive setDelegate:self];
-    if (![zipArchive UnzipOpenFile:pathToFile])
-    {
-        [zipArchive setDelegate:nil];
-        NSError *error = [NSError errorWithDomain:HHRemoteLocalizableErrorDomain code:HHRemoteLocalizableErrorCodeUnknown userInfo:@{NSLocalizedDescriptionKey:@""}];
-        *errorReference = error;
-        return nil;
-    }
-    [fileManager createDirectoryAtPath:self.setting.pathToUnzip withIntermediateDirectories:YES attributes:nil error:nil];
-    if (![zipArchive UnzipFileTo:self.setting.pathToUnzip overWrite:self.setting.isOverwrite])
-    {
-        [zipArchive setDelegate:nil];
-        NSError *error = [NSError errorWithDomain:HHRemoteLocalizableErrorDomain code:HHRemoteLocalizableErrorCodeUnknown userInfo:nil];
-        *errorReference = error;
+    if (![SSZipArchive unzipFileAtPath:pathToFile toDestination:self.setting.pathToUnzip overwrite:self.setting.isOverwrite password:@"" error:errorReference]) {
+        if (!*errorReference) {
+            NSError *error = [NSError errorWithDomain:HHRemoteLocalizableErrorDomain code:HHRemoteLocalizableErrorCodeUnknown userInfo:nil];
+            *errorReference = error;
+        }
         return nil;
     }
     NSString *bundleName = [[pathToFile lastPathComponent] stringByDeletingPathExtension];
@@ -78,11 +67,11 @@ static HHRemoteLocalizable *gDefaultLocalizable;
     } complete:^(BOOL downloadFinished, NSString *pathToFile) {
         if (!downloadFinished)
         {
-            
+            //TODO
         }
         if (!pathToFile.length)
         {
-            
+            //TODO
         }
         if (aCompletionBlock)
         {
@@ -92,7 +81,7 @@ static HHRemoteLocalizable *gDefaultLocalizable;
         }
         sSelf = nil;
     }];
-    return download.isExecuting;
+    return download.isReady;
 }
 
 

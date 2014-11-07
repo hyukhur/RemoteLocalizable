@@ -1,19 +1,21 @@
 PODS:
-  - AGAsyncTestHelper (0.2.2)
+  - AGAsyncTestHelper (1.0):
+    - AGAsyncTestHelper/Core
+  - AGAsyncTestHelper/Core (1.0)
   - OCMock (2.2.2)
+  - SSZipArchive (0.3.2)
   - TCBlobDownload (1.4.0)
-  - ZipArchive (1.2.0)
 
 DEPENDENCIES:
   - AGAsyncTestHelper
   - OCMock
-  - TCBlobDownload (~> 1.4.0)
-  - ZipArchive
+  - SSZipArchive
+  - TCBlobDownload
 
 SPEC CHECKSUMS:
-  AGAsyncTestHelper: 2d4244bd42bfd011926545765af4d2c75bd2f3b3
-  OCMock: ffba68873fd32cfd35d885bddad23bfa816da4a3
-  TCBlobDownload: 2490f51f0c4fda4e42643fcd9bd6eb9e6b18a79d
-  ZipArchive: 93bff5d8b435767ccfac976ed08ca611d950d3d0
+  AGAsyncTestHelper: fc9d44460933d8167ae431f466ab3a09a5121582
+  OCMock: ee92ff671156212865397cd6fbae60a2d3698fb8
+  SSZipArchive: 11299a4e89821bd4085b12f25edaa85853e0051c
+  TCBlobDownload: c403c54af699f445de52c82ac851084395483904
 
-COCOAPODS: 0.29.0
+COCOAPODS: 0.34.1

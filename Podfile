@@ -1,13 +1,12 @@
-
+source 'https://github.com/CocoaPods/Specs.git'
 target "RemoteLocalizable" do
     platform :ios, "6.0"
-    pod 'ZipArchive'
-    pod 'TCBlobDownload', '~> 1.4.0'
+    pod 'SSZipArchive'
+    pod 'TCBlobDownload'
 end
 
-target "RemoteLocalizableTests", :exclusive => true do
-    link_with :RemoteLocalizable
-    
+target "RemoteLocalizableTests" do
+    pod 'OCMock'
     pod 'AGAsyncTestHelper'
     # pod 'Expecta',     '~> 0.2.3'   # expecta matchers
     # pod 'OCMock',      '~> 2.2.1'   # OCMock
@@ -15,7 +14,5 @@ target "RemoteLocalizableTests", :exclusive => true do
     # pod 'OCMockito',   '~> 1.0.0'   # OCMock
     # pod 'LRMocky',     '~> 0.9.1'   # LRMocky
     # pod 'Specta'
-    pod 'OCMock'
     # pod 'OCHamcrest'
 end
-

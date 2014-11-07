@@ -6,9 +6,9 @@
 //  Copyright (c) 2013년 hyukhur. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 #import <OCMock/OCMock.h>
-#import <AGAsyncTestHelper/AGWaitForAsyncTestHelper.h>
+#import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import <TCBlobDownload/TCBlobDownloadManager.h>
 
 #import "HHRemoteLocalizable.h"
@@ -39,9 +39,8 @@
     self.localizable.remoteBundle = nil;
 }
 
-- (void)testDownloadFromLocal {
-    NSURL *bundleURL = [[NSBundle bundleForClass:[self class]] resourceURL];
-    NSURL *remotedBundleURL = [bundleURL URLByAppendingPathComponent:@"LocalizedBundle.bundle.zip"];
+- (void) testDownloadFromLocal {
+    NSURL *remotedBundleURL = [NSURL URLWithString:@"https://github.com/hyukhur/RemoteLocalizable/raw/master/RemoteLocalizableTests/LocalizedBundle.bundle.zip"];
     XCTAssertNotNil(self.localizable);
     __block BOOL downloaded = NO;
     [self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
@@ -49,7 +48,7 @@
         XCTAssertNil(error);
         downloaded = YES;
     }];
-    AG_STALL_RUNLOPP_WHILE(downloaded, 60);
+    AGWW_WAIT_WHILE(!downloaded, 60);
 }
 
 
@@ -103,16 +102,16 @@
 
 
 - (void) testLoadHHLocalizedString {
-    NSURL *bundleURL = [[NSBundle bundleForClass:[self class]] resourceURL];
-    NSURL *remotedBundleURL = [bundleURL URLByAppendingPathComponent:@"LocalizedBundle.bundle.zip"];
+    NSURL *remotedBundleURL = [NSURL URLWithString:@"https://github.com/hyukhur/RemoteLocalizable/raw/master/RemoteLocalizableTests/LocalizedBundle.bundle.zip"];
     [self.localizable setBundleWithURL:remotedBundleURL];
     __block BOOL downloaded = NO;
-    [self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
+    XCTAssertTrue([self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
         self.localizable.remoteBundle = bundle;
+        XCTAssertNotNil(bundle);
         XCTAssertNil(error);
         downloaded = YES;
-    }];
-    AG_STALL_RUNLOPP_WHILE(downloaded, 60);
+    }], @"Download Fail");
+    AGWW_WAIT_WHILE(!downloaded, 60);
     
     XCTAssertNotNil(self.localizable.remoteBundle);
     NSString *localizedString = HHLocalizedString(@"String Number 1", @"Comment");
@@ -125,25 +124,27 @@
  */
 - (void) _testLoadOldHHLocalizedString {
     NSURL *bundleURL = [[NSBundle bundleForClass:[self class]] resourceURL];
-    NSURL *remotedBundleURL = [bundleURL URLByAppendingPathComponent:@"LocalizedBundle.bundle.zip"];
+    NSURL *remotedBundleURL = [NSURL URLWithString:@"https://github.com/hyukhur/RemoteLocalizable/raw/master/RemoteLocalizableTests/LocalizedBundle.bundle.zip"];
     [self.localizable setBundleWithURL:remotedBundleURL];
     __block BOOL downloaded = NO;
-    [self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
+    XCTAssertTrue([self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
         self.localizable.remoteBundle = bundle;
+        XCTAssertNotNil(bundle);
         XCTAssertNil(error);
         downloaded = YES;
-    }];
-    AG_STALL_RUNLOPP_WHILE(downloaded, 60);
+    }], @"Download Fail");
+    AGWW_WAIT_WHILE(!downloaded, 60);
 
     remotedBundleURL = [bundleURL URLByAppendingPathComponent:@"LocalizedBundle.20140101.bundle.zip"];
     [self.localizable setBundleWithURL:remotedBundleURL];
     downloaded = NO;
     [self.localizable bundleForURL:remotedBundleURL completion:^(NSBundle *bundle, NSError *error) {
         self.localizable.remoteBundle = bundle;
+        XCTAssertNotNil(bundle);
         XCTAssertNil(error);
         downloaded = YES;
     }];
-    AG_STALL_RUNLOPP_WHILE(downloaded, 60);
+    AGWW_WAIT_WHILE(!downloaded, 60);
     
     NSString *localizedString = HHLocalizedString(@"Localized Key", @"Comment");
     XCTAssert([localizedString isEqualToString:@"Localized Value in HHLocalizedString"], @"Localized Value loading Fail in HHLocalizedString");
